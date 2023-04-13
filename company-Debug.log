@@ -1,0 +1,10 @@
+DEBUG File /home/sentic/projects/booktime/project/settings.py previous mtime: 1681302080.402189, current mtime: 1681302340.645181
+DEBUG /home/sentic/projects/booktime/project/settings.py notified as changed. Signal results: [(<function translation_file_changed at 0x7bcfadd81ca0>, None)].
+INFO /home/sentic/projects/booktime/project/settings.py changed, reloading.
+DEBUG calling main func() with request<WSGIRequest: GET '/'>
+DEBUG calling main func() with requestAnonymousUser
+DEBUG calling main func() with request -> AnonymousUser
+DEBUG calling main func() with request -> Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36
+INFO Sending email to customer service
+INFO Sending email to customer service
+INFO Sending email to customer service
