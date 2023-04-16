@@ -8,3 +8,4 @@ DEBUG calling main func() with request -> Mozilla/5.0 (X11; CrOS x86_64 14541.0.
 INFO Sending email to customer service
 INFO Sending email to customer service
 INFO Sending email to customer service
+INFO Generating thumbnail for product 1

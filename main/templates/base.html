@@ -45,7 +45,9 @@
         </ul>
       </div>
     </nav>
-    {% block content %} {% endblock content %}
+    <div class="container-fluid">
+      {% block content %} {% endblock content %}
+    </div>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
