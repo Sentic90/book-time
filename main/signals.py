@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 from .models import ProductImage
 
-THUMBANIL_SIZE = (300, 300)
+THUMBANIL_SIZE = (200, 150)
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Product</h1>
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <td>{{ object.name}}</td>
+  </tr>
+  <tr>
+    <th>Cover Image</th>
+    <td>
+      {% for image in object.productimage_set.all %}
+      <img src="{{ image.thumbnail.url }}" alt="{{ object.name}}-image" />
+      {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <th>Price</th>
+    <td>{{ object.price }}</td>
+  </tr>
+  <tr>
+    <th>Description</th>
+    <td>
+      {{ object.description|default:"No Description avaliable"|linebreaks}}
+    </td>
+  </tr>
+  <tr>
+    <th>Tags</th>
+    <td>
+      {% for tag in object.tags.all %}
+      <a href="{% url 'products' tag.slug%}"
+        >{{ tag.name|default:"No tag avaliable"}},</a
+      >
+      {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <th>In Stock</th>
+    <td>{{ object.in_stock }}</td>
+  </tr>
+  <tr>
+    <th>Updated</th>
+    <td>{{ object.date_updated|date:"F Y"}}</td>
+  </tr>
+</table>
+
+<button class="btn btn-success">
+  <a href="{% url 'add_to_basket'}?product_id={{ object.id}}"
+    >Add to basket</a
+  >
+</button>
+
+{% endblock content %}
