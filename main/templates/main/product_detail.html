@@ -43,10 +43,6 @@
   </tr>
 </table>
 
-<button class="btn btn-success">
-  <a href="{% url 'add_to_basket'}?product_id={{ object.id}}"
-    >Add to basket</a
-  >
-</button>
+<a href="{% url 'add_to_basket'%}?product_id={{ object.id}}">Add to basket</a>
 
 {% endblock content %}
