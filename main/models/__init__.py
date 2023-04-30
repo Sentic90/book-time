@@ -1,2 +1,3 @@
 from .user import (User, Address)
-from .store import (Product, ProductImage, ProductTag, Basket, BasketLine)
+from .store import (Product, ProductImage, ProductTag,
+                    Basket, BasketLine, Order, OrderItem)

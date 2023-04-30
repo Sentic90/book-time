@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.html import format_html
 from .models import (Product, ProductTag, ProductImage,
-                     User, Basket, BasketLine)
+                     User, Basket, BasketLine, Order, OrderItem)
 
 
 @admin.register(User)
@@ -69,8 +69,62 @@ class ProductImageAdmin(admin.ModelAdmin):
         return obj.product.name
 
 
+class BasketLineInline(admin.TabularInline):
+    model = BasketLine
+    raw_id_fields = ("product",)
+
+
+@admin.register(Basket)
+class BasketAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "status", "count")
+    list_editable = ("status",)
+    list_filter = ("status",)
+    inlines = (BasketLineInline,)
+
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    # raw_id_fields = ("product",)
+    autocomplete_fields = ['product']
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "status")
+    list_editable = ("status",)
+    list_filter = ("status", "shipping_country", "date_added")
+    inlines = (OrderItemInline,)
+
+    fieldsets = (
+        (None, {"fields": ("user", "status")}),
+        (
+            "Billing info",
+            {
+                "fields": (
+                    "billing_name",
+                    "billing_address1",
+                    "billing_address2",
+                    "billing_zip_code",
+                    "billing_city",
+                    "billing_country",
+                )
+            },
+        ),
+        (
+            "Shipping info",
+            {"fields": (
+                "shipping_name",
+                "shipping_address1",
+                "shipping_address2",
+                "shipping_zip_code",
+                "shipping_city",
+                "shipping_country",
+            )
+            },
+        ),
+    )
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(ProductTag, ProductTagAdmin)
-admin.site.register(Basket)
-admin.site.register(BasketLine)

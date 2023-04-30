@@ -96,6 +96,42 @@ class Basket(models.Model):
             )
         )
 
+        order_data = {
+            "user": self.user,
+            "billing_name": billing_address.name,
+            "billing_address1": billing_address.address1,
+            "billing_address2": billing_address.address2,
+            "billing_zip_code": billing_address.zip_code,
+            "billing_city": billing_address.city,
+            "billing_country": billing_address.country,
+            "shipping_name": shipping_address.name,
+            "shipping_address1": shipping_address.address1,
+            "shipping_address2": shipping_address.address2,
+            "shipping_zip_code": shipping_address.zip_code,
+            "shipping_city": shipping_address.city,
+            "shipping_country": shipping_address.country
+        }
+
+        order = Order.objects.create(**order_data)
+        counter = 0
+        for line in self.basketline_set.all():
+            for item in range(line.quantity):
+                order_item_data = {
+                    "order": order,
+                    "product": line.product,
+                }
+                order_item = OrderItem.objects.create(
+                    **order_item_data
+                )
+                counter += 1
+        logger.info(
+            "Created order with id=%d and lines_count=%d", order.id, counter
+        )
+
+        self.status = Basket.SUBMITTED
+        self.save()
+        return order
+
 
 class BasketLine(models.Model):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
@@ -119,18 +155,21 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUSES, default=NEW)
     billing_name = models.CharField(max_length=60)
     billing_address1 = models.CharField(max_length=60)
-    billing_address2 = models.CharField(max_length=60, blank=True)
+    billing_address2 = models.CharField(max_length=60, blank=True, null=True)
     billing_zip_code = models.CharField(max_length=12)
     billing_city = models.CharField(max_length=60)
     billing_country = models.CharField(max_length=3)
     shipping_name = models.CharField(max_length=60)
     shipping_address1 = models.CharField(max_length=60)
-    shipping_address2 = models.CharField(max_length=60, blank=True)
+    shipping_address2 = models.CharField(max_length=60, blank=True, null=True)
     shipping_zip_code = models.CharField(max_length=12)
     shipping_city = models.CharField(max_length=60)
     shipping_country = models.CharField(max_length=3)
     date_updated = models.DateTimeField(auto_now=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.items)
 
 
 class OrderItem(models.Model):
@@ -148,3 +187,6 @@ class OrderItem(models.Model):
         Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     status = models.IntegerField(choices=STATUSES, default=NEW)
+
+    def __str__(self) -> str:
+        return self.product.name

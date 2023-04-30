@@ -10,7 +10,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render
 from main import models
-from .forms import (ContactForm, UserCreationForm, BasketLineFormSet)
+from .forms import (ContactForm, UserCreationForm,
+                    AddressSelectionForm, BasketLineFormSet)
 
 
 logger = logging.getLogger(__name__)
@@ -136,6 +137,28 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
+
+class AddressSelectionView(LoginRequiredMixin, FormView):
+    template_name = "address_select.html"
+    form_class = AddressSelectionForm
+    success_url = reverse_lazy('checkout_done')
+
+    # context {}
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        del self.request.session['basket_id']
+        basket = self.request.basket
+        basket.create_order(
+            form.cleaned_data['billing_address'],
+            form.cleaned_data['shipping_address'],
+        )
+        
+        return super().form_valid(form)
 
 def add_to_basket(request):
     # product_pk = request.GET.get("product_id")

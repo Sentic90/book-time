@@ -43,3 +43,6 @@ INFO New signup for email=user@domain.com through SignupView
 INFO New signup for email=user@domain.com through SignupView
 INFO Authentication successful for email=admin@site.com
 INFO New signup for email=user@domain.com through SignupView
+INFO Creating order for basket_id=10, shipping_address_id=2, billing_address_id=2
+INFO None
+INFO Created order with id=2 and lines_count=10
